@@ -7,6 +7,7 @@ import FeaturedClasses from '@/components/FeaturedClasses';
 import AboutUs from '@/components/AboutUs';
 import Newsletter from '@/components/Newsletter';
 import LatestCommunity from '@/components/LatestCommunity';
+import AboutSection from '@/components/AboutSection';
 
 const Home = () => {
     const { scrollY } = useScroll();
@@ -179,11 +180,13 @@ const Home = () => {
                 </div>
             </div>
 
-            <Stats />
-
             <AboutUs />
 
+            <AboutSection />
+
             <FeaturedClasses />
+
+            <Stats />
 
             <Newsletter />
             <LatestCommunity />
