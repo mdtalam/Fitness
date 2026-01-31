@@ -4,6 +4,7 @@ import MainLayout from '@/components/layout/MainLayout';
 import Home from '@/pages/Home';
 import Trainers from '@/pages/Trainers';
 import Classes from '@/pages/Classes';
+import ClassDetail from '@/pages/ClassDetail';
 import Forum from '@/pages/Forum';
 import TrainerDetail from '@/pages/TrainerDetail';
 import Booking from '@/pages/Booking';
@@ -22,6 +23,7 @@ import MemberDashboard from '@/pages/MemberDashboard';
 import MemberBookings from '@/pages/member/MemberBookings';
 import Profile from '@/pages/member/Profile';
 import AdminDashboard from '@/pages/AdminDashboard';
+import AdminBalance from '@/pages/admin/AdminBalance';
 import ManageApplications from '@/pages/admin/ManageApplications';
 import ApplicationDetails from '@/pages/admin/ApplicationDetails';
 import AdminNewsletter from '@/pages/AdminNewsletter';
@@ -85,6 +87,7 @@ const router = createBrowserRouter([
             },
 
             { path: '/admin-dashboard', element: <AdminDashboard /> },
+            { path: '/admin-dashboard/balance', element: <AdminBalance /> },
             { path: '/admin-dashboard/trainers', element: <AllTrainers /> },
             { path: '/admin-dashboard/applications', element: <ManageApplications /> },
             { path: '/admin-dashboard/applications/:id', element: <ApplicationDetails /> },
@@ -103,6 +106,8 @@ const router = createBrowserRouter([
                     </ProtectedRoute>
                 )
             },
+
+            { path: '/classes/:id', element: <ClassDetail /> },
 
             // Catch-all 404
             { path: '*', element: <ErrorPage /> }

@@ -139,3 +139,59 @@ exports.confirmBooking = async (req, res) => {
         });
     }
 };
+// @desc    Get Admin Stats (Balance, Transactions, Chart Data)
+// @route   GET /api/payments/admin-stats
+// @access  Private (Admin)
+exports.getAdminStats = async (req, res) => {
+    try {
+        const db = getDb();
+
+        // 1. Calculate Total Balance
+        const totalBalanceData = await db.collection('transactions').aggregate([
+            { $match: { status: 'success' } }, // Only count successful transactions
+            { $group: { _id: null, total: { $sum: '$amount' } } }
+        ]).next();
+
+        const totalBalance = totalBalanceData ? totalBalanceData.total : 0;
+
+        // 2. Fetch Last 6 Transactions
+        const lastTransactions = await db.collection('transactions')
+            .find({ status: 'success' })
+            .sort({ createdAt: -1 })
+            .limit(6)
+            .toArray();
+
+        // 3. Count Newsletter Subscribers
+        const newsletterSubscribersCount = await db.collection('newsletters').countDocuments();
+
+        // 4. Count Paid Members (Unique members who have made a payment)
+        const paidMembersList = await db.collection('transactions')
+            .distinct('memberId', { status: 'success' });
+
+        const paidMembersCount = paidMembersList.length;
+
+        // Construct chart data structure
+        const chartData = [
+            { name: 'Newsletter Subscribers', value: newsletterSubscribersCount },
+            { name: 'Paid Members', value: paidMembersCount }
+        ];
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                totalBalance,
+                lastTransactions,
+                chartData,
+                newsletterSubscribersCount,
+                paidMembersCount
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching admin stats:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Error fetching admin stats',
+            error: error.message
+        });
+    }
+};

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import CountUp from '@/components/ui/CountUp';
 import { Loader2, ArrowLeft, Star, Clock, Calendar, CheckCircle2, Award, Zap, Facebook, Instagram, Twitter, Linkedin, Mail } from 'lucide-react';
 
 const TrainerDetail = () => {
@@ -59,7 +60,7 @@ const TrainerDetail = () => {
                 <div className="absolute top-20 right-[10%] w-64 h-64 bg-primary/10 rounded-full blur-3xl opacity-50 animate-pulse"></div>
                 <div className="absolute bottom-10 left-[5%] w-48 h-48 bg-primary/20 rounded-full blur-3xl opacity-30"></div>
 
-                <div className="container relative h-full flex items-end pb-8">
+                <div className="container relative h-full flex items-end pb-8 px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center gap-2 mb-8 invisible lg:visible">
                         <Button variant="ghost" size="sm" asChild className="hover:bg-background/20 font-bold">
                             <Link to="/trainers"> <ArrowLeft className="h-4 w-4 mr-2" /> Back to Team </Link>
@@ -68,7 +69,7 @@ const TrainerDetail = () => {
                 </div>
             </div>
 
-            <div className="container relative -mt-32">
+            <div className="container relative -mt-32 px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
                     {/* Left Column: Trainer Information Section */}
                     <div className="lg:col-span-4 lg:sticky lg:top-24 h-fit">
@@ -98,7 +99,9 @@ const TrainerDetail = () => {
                                         {[...Array(5)].map((_, i) => (
                                             <Star key={i} className={`h-4 w-4 ${i < Math.floor(trainer.rating) ? 'text-primary fill-primary' : 'text-muted fill-muted'}`} />
                                         ))}
-                                        <span className="text-xs font-black ml-1.5 text-foreground/80">{trainer.rating} / 5.0</span>
+                                        <span className="text-xs font-black ml-1.5 text-foreground/80">
+                                            <CountUp to={trainer.rating} decimals={1} suffix=" / 5.0" duration={1.5} />
+                                        </span>
                                     </div>
 
                                     <div className="flex items-center justify-center gap-3 mt-8">
@@ -121,7 +124,9 @@ const TrainerDetail = () => {
                                     <div className="p-4 rounded-2xl bg-muted/30 border border-muted-foreground/10 text-center">
                                         <Award className="h-5 w-5 text-primary mx-auto mb-2" />
                                         <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-none mb-1">Experience</p>
-                                        <p className="text-xl font-black">{trainer.experience}+ Yrs</p>
+                                        <p className="text-xl font-black">
+                                            <CountUp to={trainer.experience} suffix="+" duration={2} /> Yrs
+                                        </p>
                                     </div>
                                     <div className="p-4 rounded-2xl bg-muted/30 border border-muted-foreground/10 text-center">
                                         <Zap className="h-5 w-5 text-primary mx-auto mb-2" />

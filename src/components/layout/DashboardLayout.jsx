@@ -46,6 +46,7 @@ const DashboardLayout = ({ children }) => {
         ],
         admin: [
             { name: 'Statistics', path: '/admin-dashboard', icon: BarChart3 },
+            { name: 'Balance', path: '/admin-dashboard/balance', icon: CreditCard },
             { name: 'Trainers', path: '/admin-dashboard/trainers', icon: Users },
             { name: 'Applied Trainers', path: '/admin-dashboard/applications', icon: FileText },
             { name: 'Classes', path: '/admin-dashboard/classes', icon: BookOpen },

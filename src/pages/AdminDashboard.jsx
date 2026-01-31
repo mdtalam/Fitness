@@ -74,6 +74,12 @@ const AdminDashboard = () => {
             <h3 className="text-lg font-bold mb-4">Management Areas</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
                 <ManagementCard
+                    title="Financials"
+                    description="View balance and transactions."
+                    link="/admin-dashboard/balance"
+                    icon={<DollarSign className="h-6 w-6 text-emerald-500" />}
+                />
+                <ManagementCard
                     title="Trainers"
                     description="Manage active fitness trainers."
                     link="/admin-dashboard/trainers"

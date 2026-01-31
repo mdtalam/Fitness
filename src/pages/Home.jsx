@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { PlayCircle, ArrowRight, Users, Star } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import CountUp from '@/components/ui/CountUp';
 import FeaturedClasses from '@/components/FeaturedClasses';
 import AboutUs from '@/components/AboutUs';
 import Newsletter from '@/components/Newsletter';
@@ -194,22 +195,30 @@ const Home = () => {
     );
 };
 
-const Stats = () => (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 rounded-3xl border bg-card/50 backdrop-blur-sm p-8 md:p-12 shadow-sm">
-            {[
-                { label: 'Trainers', value: '50+' },
-                { label: 'Active Members', value: '10k+' },
-                { label: 'Workout Classes', value: '120+' },
-                { label: 'Success Stories', value: '5k+' },
-            ].map((stat) => (
-                <div key={stat.label} className="text-center md:text-left">
-                    <p className="text-3xl font-extrabold text-primary mb-1">{stat.value}</p>
-                    <p className="text-sm text-muted-foreground font-medium">{stat.label}</p>
-                </div>
-            ))}
+const Stats = () => {
+    return (
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 rounded-[2.5rem] border bg-card/40 backdrop-blur-xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+                {/* Decorative background accent */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none"></div>
+                <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl -ml-32 -mb-32 pointer-events-none"></div>
+
+                {[
+                    { label: 'Trainers', value: 50, suffix: '+' },
+                    { label: 'Active Members', value: 10, suffix: 'k+' },
+                    { label: 'Workout Classes', value: 120, suffix: '+' },
+                    { label: 'Success Stories', value: 5, suffix: 'k+' },
+                ].map((stat, index) => (
+                    <div key={stat.label} className="text-center md:text-left relative z-10">
+                        <p className="text-4xl md:text-5xl font-black text-primary mb-2 tracking-tight">
+                            <CountUp to={stat.value} suffix={stat.suffix} delay={index * 0.1} />
+                        </p>
+                        <p className="text-sm md:text-base text-muted-foreground font-bold uppercase tracking-widest">{stat.label}</p>
+                    </div>
+                ))}
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 export default Home;
