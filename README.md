@@ -742,8 +742,8 @@ npm run dev
 - `DELETE /api/newsletter/unsubscribe` - Unsubscribe
 
 ### Payment
-- `POST /api/payment/create-intent` - Create Stripe payment intent
-- `POST /api/payment/webhook` - Stripe webhook handler
+- `POST /api/payments/create-intent` - Create Stripe payment intent
+- `POST /api/payments/webhook` - Stripe webhook handler
 
 ---
 

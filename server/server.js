@@ -101,7 +101,7 @@ app.use('/api/bookings', bookingRoutes);
 app.use('/api/forum', forumRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/newsletter', newsletterRoutes);
-app.use('/api/payment', paymentRoutes);
+app.use('/api/payments', paymentRoutes);
 
 // 404 handler
 app.use((req, res) => {

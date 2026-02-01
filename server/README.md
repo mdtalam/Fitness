@@ -107,7 +107,7 @@ server/
 - `POST /api/newsletter/subscribe` - Subscribe to newsletter
 
 ### Payment
-- `POST /api/payment/create-intent` - Create payment intent
+- `POST /api/payments/create-intent` - Create payment intent
 
 ---
 
