@@ -92,10 +92,6 @@ npm run dev:client
 - **CORS Configuration**: Restricted to authorized production origins.
 - **Image Optimization**: Fast loading assets.
 
----
-
-## 📄 License
-This project is licensed under the MIT License.
 
 ---
 
