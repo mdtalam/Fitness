@@ -11,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks/useAuth';
 import { Dumbbell, Menu, X, LayoutDashboard, LogOut, Settings, UserCircle, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ModeToggle } from '@/components/mode-toggle';
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -57,8 +58,8 @@ const Navbar = () => {
                                 key={link.name}
                                 to={link.path}
                                 className={`text-sm font-bold transition-all duration-300 relative py-1 ${isActive
-                                        ? 'text-primary'
-                                        : 'text-muted-foreground hover:text-primary'
+                                    ? 'text-primary'
+                                    : 'text-muted-foreground hover:text-primary'
                                     }`}
                             >
                                 {link.name}
@@ -135,6 +136,11 @@ const Navbar = () => {
                         </div>
                     )}
 
+                    {/* Theme Toggle */}
+                    <div className="hidden md:block">
+                        <ModeToggle />
+                    </div>
+
                     {/* Mobile Menu Trigger */}
                     <div className="md:hidden">
                         <Button
@@ -166,8 +172,8 @@ const Navbar = () => {
                                         key={link.name}
                                         to={link.path}
                                         className={`flex items-center justify-between p-4 rounded-2xl transition-all ${isActive
-                                                ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20'
-                                                : 'hover:bg-muted font-bold'
+                                            ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20'
+                                            : 'hover:bg-muted font-bold'
                                             }`}
                                     >
                                         <span className="font-black italic uppercase tracking-widest">{link.name}</span>
@@ -180,8 +186,8 @@ const Navbar = () => {
                                 <Link
                                     to="/become-trainer"
                                     className={`flex items-center justify-between p-4 rounded-2xl transition-all ${location.pathname === '/become-trainer'
-                                            ? 'bg-primary/10 text-primary'
-                                            : 'bg-primary/5 text-primary hover:bg-primary/10'
+                                        ? 'bg-primary/10 text-primary'
+                                        : 'bg-primary/5 text-primary hover:bg-primary/10'
                                         }`}
                                 >
                                     <span className="font-black italic uppercase tracking-widest text-sm">Become a Trainer</span>

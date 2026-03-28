@@ -4,13 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
+
 import { Loader2, Mail, Lock, User, Image, ArrowRight } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
@@ -30,9 +24,7 @@ const Register = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleRoleChange = (value) => {
-        setFormData({ ...formData, role: value });
-    };
+
 
     const handleRegister = async (e) => {
         e.preventDefault();
@@ -122,18 +114,7 @@ const Register = () => {
                                     />
                                 </div>
                             </div>
-                            <div className="space-y-1">
-                                <Select value={formData.role} onValueChange={handleRoleChange}>
-                                    <SelectTrigger className="h-12 bg-muted/30 border-none ring-1 ring-border focus:ring-primary">
-                                        <SelectValue placeholder="Select Role" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="member">Member</SelectItem>
-                                        <SelectItem value="trainer">Trainer</SelectItem>
-                                        <SelectItem value="admin">Admin</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
+
                             <Button type="submit" className="w-full h-14 font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] mt-4" disabled={loading}>
                                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Create Account'}
                             </Button>

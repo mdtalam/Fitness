@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { PlayCircle, ArrowRight, Users, Star } from 'lucide-react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import CountUp from '@/components/ui/CountUp';
 import FeaturedClasses from '@/components/FeaturedClasses';
 import AboutUs from '@/components/AboutUs';
@@ -10,7 +10,24 @@ import Newsletter from '@/components/Newsletter';
 import LatestCommunity from '@/components/LatestCommunity';
 import AboutSection from '@/components/AboutSection';
 
+const heroImages = [
+    "/hero.png", // Keep original as first option
+    "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop", // Gym Dumbbells
+    "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop", // Weights
+    "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=2070&auto=format&fit=crop"  // Cardio/Ropes
+];
+
 const Home = () => {
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentImageIndex((prevIndex) => (prevIndex + 1) % heroImages.length);
+        }, 5000); // Change image every 5 seconds
+
+        return () => clearInterval(interval);
+    }, []);
+
     const { scrollY } = useScroll();
     const y1 = useTransform(scrollY, [0, 500], [0, 200]);
     const opacity = useTransform(scrollY, [0, 300], [1, 0]);
@@ -45,11 +62,18 @@ const Home = () => {
                     className="absolute inset-0 -z-10"
                 >
                     <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-background z-10"></div>
-                    <img
-                        src="/hero.png"
-                        alt="Fitness Hero"
-                        className="w-full h-full object-cover"
-                    />
+                    <AnimatePresence mode="wait">
+                        <motion.img
+                            key={currentImageIndex}
+                            src={heroImages[currentImageIndex]}
+                            alt="Fitness Hero"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 1.5 }}
+                            className="absolute inset-0 w-full h-full object-cover"
+                        />
+                    </AnimatePresence>
                 </motion.div>
 
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-20">

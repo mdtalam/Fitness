@@ -2,7 +2,8 @@ import React from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import SectionHeader from '@/components/SectionHeader';
 import { Card, CardContent } from '@/components/ui/card';
-import { BarChart, Users, DollarSign, Activity, Mail, Loader2 } from 'lucide-react';
+import { BarChart as BarChartIcon, Users, DollarSign, Activity, Mail, Loader2 } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 import { useQuery } from '@tanstack/react-query';
 import api from '@/services/api';
@@ -103,6 +104,41 @@ const AdminDashboard = () => {
                     link="/admin-dashboard/newsletter"
                     icon={<Mail className="h-6 w-6 text-emerald-500" />}
                 />
+            </div>
+
+            {/* Revenue Trend Chart */}
+            <h3 className="text-lg font-bold mb-4">Platform Activity</h3>
+            <div className="h-[400px] w-full bg-card rounded-[2.5rem] p-8 border-none shadow-xl mb-12">
+                <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={stats?.revenueChart || []}>
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
+                        <XAxis
+                            dataKey="name"
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fill: '#6B7280', fontSize: 12, fontWeight: 700 }}
+                            dy={10}
+                        />
+                        <YAxis
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fill: '#6B7280', fontSize: 12, fontWeight: 700 }}
+                            tickFormatter={(value) => `$${value}`}
+                        />
+                        <Tooltip
+                            cursor={{ fill: '#F3F4F6' }}
+                            contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', padding: '12px' }}
+                            itemStyle={{ color: '#10b981', fontWeight: 800 }}
+                            labelStyle={{ color: '#374151', fontWeight: 700, marginBottom: '4px' }}
+                        />
+                        <Bar
+                            dataKey="value"
+                            fill="#10b981"
+                            radius={[12, 12, 12, 12]}
+                            barSize={40}
+                        />
+                    </BarChart>
+                </ResponsiveContainer>
             </div>
 
             <div className="p-12 text-center rounded-3xl border-2 border-dashed bg-muted/20 opacity-60">

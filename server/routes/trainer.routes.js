@@ -5,6 +5,7 @@ const trainerAppController = require('../controllers/trainerApplication.controll
 const { protect, restrictTo } = require('../middleware/auth.middleware');
 
 router.get('/', trainerController.getTrainers);
+router.get('/profile', protect, restrictTo('trainer'), trainerController.getMyProfile);
 router.get('/dashboard/stats', protect, restrictTo('trainer'), trainerController.getDashboardStats);
 router.get('/dashboard/bookings', protect, restrictTo('trainer'), trainerController.getTrainerBookings);
 router.get('/dashboard/students', protect, restrictTo('trainer'), trainerController.getTrainerStudents);

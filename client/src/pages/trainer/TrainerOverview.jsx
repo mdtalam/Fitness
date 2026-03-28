@@ -7,8 +7,14 @@ import { Button } from '@/components/ui/button';
 
 import { useQuery } from '@tanstack/react-query';
 import api from '@/services/api';
+import { useAuth } from '@/hooks/useAuth';
+import { toast } from 'react-hot-toast';
+
+
 
 const TrainerOverview = () => {
+    const { user } = useAuth();
+
     const { data: stats, isLoading: isStatsLoading } = useQuery({
         queryKey: ['trainerStats'],
         queryFn: async () => {
@@ -25,7 +31,35 @@ const TrainerOverview = () => {
         }
     });
 
+    const handleShareProfile = async () => {
+        const profileUrl = `${window.location.origin}/dashboard/profile`;
+        const shareData = {
+            title: `${user?.name || 'Fitness Trainer'} - Fitness Trainer`,
+            text: `Check out my fitness trainer profile and book a session with me!`,
+            url: profileUrl
+        };
+
+        try {
+            // Check if Web Share API is available (mainly for mobile devices)
+            if (navigator.share) {
+                await navigator.share(shareData);
+                toast.success('Profile shared successfully!');
+            } else {
+                // Fallback: Copy to clipboard
+                await navigator.clipboard.writeText(profileUrl);
+                toast.success('Profile link copied to clipboard!');
+            }
+        } catch (error) {
+            // User cancelled share or clipboard failed
+            if (error.name !== 'AbortError') {
+                toast.error('Failed to share profile');
+            }
+        }
+
+    };
+
     return (
+
         <DashboardLayout>
             <SectionHeader
                 title="Trainer Command Center"
@@ -86,7 +120,7 @@ const TrainerOverview = () => {
                         <p className="text-sm font-medium opacity-80 leading-relaxed mb-8">
                             Create more slots or share your profile to attract new students to your classes.
                         </p>
-                        <Button className="w-full bg-white text-primary hover:bg-white/90 font-black uppercase tracking-widest rounded-xl h-12">Share Profile</Button>
+                        <Button onClick={handleShareProfile} className="w-full bg-white text-primary hover:bg-white/90 font-black uppercase tracking-widest rounded-xl h-12">Share Profile</Button>
                     </Card>
                 </div>
             </div>

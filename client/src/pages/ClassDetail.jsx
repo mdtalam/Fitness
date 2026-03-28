@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card } from '@/components/ui/card';
 import { Loader2, ArrowLeft, Clock, Activity, Flame, Users, ArrowRight, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
+import CountUp from '@/components/ui/CountUp';
 
 const ClassDetail = () => {
     const { id } = useParams();

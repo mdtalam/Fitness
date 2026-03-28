@@ -161,6 +161,39 @@ exports.getTrainer = async (req, res) => {
     }
 };
 
+// @desc    Get current trainer's profile
+// @route   GET /api/trainers/profile
+// @access  Private (Trainer only)
+exports.getMyProfile = async (req, res) => {
+    try {
+        const db = getDb();
+        const userId = new ObjectId(req.user._id);
+
+        const trainer = await db.collection('trainers').findOne({ userId });
+
+        if (!trainer) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'Trainer profile not found'
+            });
+        }
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                trainer
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: 'Error fetching trainer profile',
+            error: error.message
+        });
+    }
+};
+
+
 // @desc    Get trainer dashboard stats
 // @route   GET /api/trainers/dashboard/stats
 // @access  Private (Trainer only)

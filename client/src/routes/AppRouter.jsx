@@ -17,6 +17,9 @@ import AddForum from '@/pages/AddForum';
 import ManageForums from '@/pages/ManageForums';
 import EditForum from '@/pages/EditForum';
 import Payment from '@/pages/Payment';
+import PrivacyPolicy from '@/pages/PrivacyPolicy';
+import TermsOfService from '@/pages/TermsOfService';
+import CookiePolicy from '@/pages/CookiePolicy';
 
 // Dashboard Components
 import MemberDashboard from '@/pages/MemberDashboard';
@@ -69,6 +72,11 @@ const router = createBrowserRouter([
             { path: '/booking/:trainerId/:slotId', element: <Booking /> },
             { path: '/payment/:trainerId/:slotId/:packageId', element: <Payment /> },
             { path: '/settings', element: <Settings /> },
+
+            // Legal Pages
+            { path: '/privacy-policy', element: <PrivacyPolicy /> },
+            { path: '/terms-of-service', element: <TermsOfService /> },
+            { path: '/cookie-policy', element: <CookiePolicy /> },
 
             // Dashboard Routes
             { path: '/dashboard', element: <MemberDashboard /> },

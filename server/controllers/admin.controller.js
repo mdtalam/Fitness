@@ -20,8 +20,44 @@ exports.getStats = async (req, res) => {
         // 4. Pending Applications
         const totalPendingApplications = await db.collection('trainerapplications').countDocuments({ status: 'pending' });
 
-        // 5. Revenue (Mock logic for now, or sum payments)
-        const totalRevenue = 12450;
+        // 5. Total Revenue (Dynamically calculated from transactions)
+        const totalRevenueData = await db.collection('transactions').aggregate([
+            { $match: { status: 'success' } },
+            { $group: { _id: null, total: { $sum: '$amount' } } }
+        ]).next();
+        const totalRevenue = totalRevenueData ? totalRevenueData.total : 0;
+
+        // 6. Monthly Revenue Chart (Last 6 Months)
+        const sixMonthsAgo = new Date();
+        sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
+        sixMonthsAgo.setDate(1); // Start of the month
+        sixMonthsAgo.setHours(0, 0, 0, 0);
+
+        const revenueChartData = await db.collection('transactions').aggregate([
+            {
+                $match: {
+                    status: 'success',
+                    createdAt: { $gte: sixMonthsAgo }
+                }
+            },
+            {
+                $group: {
+                    _id: {
+                        year: { $year: '$createdAt' },
+                        month: { $month: '$createdAt' }
+                    },
+                    total: { $sum: '$amount' }
+                }
+            },
+            { $sort: { '_id.year': 1, '_id.month': 1 } }
+        ]).toArray();
+
+        // Format for Recharts (e.g., "Jan", "Feb")
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const revenueChart = revenueChartData.map(item => ({
+            name: monthNames[item._id.month - 1],
+            value: item.total
+        }));
 
         res.status(200).json({
             status: 'success',
@@ -31,7 +67,8 @@ exports.getStats = async (req, res) => {
                     totalTrainers,
                     totalClasses,
                     totalPendingApplications,
-                    totalRevenue
+                    totalRevenue,
+                    revenueChart // Added chart data
                 }
             }
         });

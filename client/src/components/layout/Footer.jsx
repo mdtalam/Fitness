@@ -97,9 +97,9 @@ const Footer = () => {
                         © {currentYear} FitTracker Inc. All rights reserved.
                     </p>
                     <div className="flex items-center gap-6">
-                        <Link to="/privacy" className="text-xs text-muted-foreground hover:text-primary transition-colors">Privacy Policy</Link>
-                        <Link to="/terms" className="text-xs text-muted-foreground hover:text-primary transition-colors">Terms of Service</Link>
-                        <Link to="/cookies" className="text-xs text-muted-foreground hover:text-primary transition-colors">Cookie Policy</Link>
+                        <Link to="/privacy-policy" className="text-xs text-muted-foreground hover:text-primary transition-colors">Privacy Policy</Link>
+                        <Link to="/terms-of-service" className="text-xs text-muted-foreground hover:text-primary transition-colors">Terms of Service</Link>
+                        <Link to="/cookie-policy" className="text-xs text-muted-foreground hover:text-primary transition-colors">Cookie Policy</Link>
                     </div>
                 </div>
             </div>
