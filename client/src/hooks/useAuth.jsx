@@ -16,14 +16,31 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Check for stored token and user on mount
-        const storedToken = localStorage.getItem('token');
-        const storedUser = localStorage.getItem('user');
+        const fetchUserProfile = async () => {
+            const storedToken = localStorage.getItem('token');
+            if (storedToken) {
+                try {
+                    const response = await api.get('/users/profile');
+                    const profileData = response.data.data.user;
+                    setUser(profileData);
+                    localStorage.setItem('user', JSON.stringify(profileData));
+                } catch (error) {
+                    console.error('Failed to fetch user profile', error);
+                    // If token is invalid, clear storage
+                    if (error.response?.status === 401) {
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                        setUser(null);
+                    }
+                }
+            } else {
+                const storedUser = localStorage.getItem('user');
+                if (storedUser) setUser(JSON.parse(storedUser));
+            }
+            setLoading(false);
+        };
 
-        if (storedToken && storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
-        setLoading(false);
+        fetchUserProfile();
     }, []);
 
     const register = async (email, password, name, photoURL, role) => {

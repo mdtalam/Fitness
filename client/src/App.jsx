@@ -5,14 +5,18 @@ import AppRouter from './routes/AppRouter';
 
 import { AuthProvider } from './hooks/useAuth';
 
+import { ThemeProvider } from "@/components/theme-provider"
+
 const queryClient = new QueryClient();
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <AppRouter />
-        <Toaster position="top-center" />
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          <AppRouter />
+          <Toaster position="top-center" />
+        </ThemeProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

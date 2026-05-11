@@ -11,13 +11,22 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks/useAuth';
 import { Dumbbell, Menu, X, LayoutDashboard, LogOut, Settings, UserCircle, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ModeToggle } from '@/components/mode-toggle';
+import ThemeSwitcher from '@/components/ThemeSwitcher';
+import { useTheme } from '@/components/theme-provider';
 
 const Navbar = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { user, logout } = useAuth();
+    const { navbarColor } = useTheme();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    // Dynamic Text Color based on Navbar Background
+    const navTextColor = (navbarColor === 'primary' || navbarColor === 'dark' || navbarColor === 'indigo') 
+        ? 'text-white' 
+        : 'text-foreground';
+    
+    const logoTextColor = (navbarColor === 'primary') ? 'text-white' : 'bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent';
 
     // Close mobile menu on route change
     useEffect(() => {
@@ -37,14 +46,17 @@ const Navbar = () => {
     ];
 
     return (
-        <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md transition-all duration-300">
+        <nav 
+            className={`sticky top-0 z-50 w-full border-b transition-all duration-500 ${navbarColor === 'glass' ? 'bg-transparent border-transparent' : 'backdrop-blur-md'}`}
+            style={{ backgroundColor: navbarColor === 'glass' ? 'transparent' : 'var(--navbar-bg)' }}
+        >
             <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
                 {/* Logo */}
                 <Link to="/" className="flex items-center gap-2 transition-transform hover:scale-105">
                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/20">
-                        <Dumbbell className="h-6 w-6 text-primary-foreground" />
+                        <Dumbbell className={`h-6 w-6 text-primary-foreground`} />
                     </div>
-                    <span className="hidden text-xl font-black tracking-tighter sm:block bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                    <span className={`hidden text-xl font-black tracking-tighter sm:block ${logoTextColor}`}>
                         FitTracker
                     </span>
                 </Link>
@@ -58,8 +70,8 @@ const Navbar = () => {
                                 key={link.name}
                                 to={link.path}
                                 className={`text-sm font-bold transition-all duration-300 relative py-1 ${isActive
-                                    ? 'text-primary'
-                                    : 'text-muted-foreground hover:text-primary'
+                                    ? (navbarColor === 'primary' ? 'text-white underline underline-offset-8' : 'text-primary')
+                                    : `${navTextColor} hover:opacity-80`
                                     }`}
                             >
                                 {link.name}
@@ -138,7 +150,7 @@ const Navbar = () => {
 
                     {/* Theme Toggle */}
                     <div className="hidden md:block">
-                        <ModeToggle />
+                        <ThemeSwitcher />
                     </div>
 
                     {/* Mobile Menu Trigger */}

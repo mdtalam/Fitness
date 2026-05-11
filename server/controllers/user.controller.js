@@ -26,6 +26,9 @@ exports.getProfile = async (req, res) => {
                     name: user.name,
                     role: user.role,
                     photoURL: user.photoURL,
+                    theme: user.theme || 'system',
+                    accentColor: user.accentColor || 'lime',
+                    navbarColor: user.navbarColor || 'default',
                     createdAt: user.createdAt
                 }
             }
@@ -155,6 +158,36 @@ exports.changePassword = async (req, res) => {
         res.status(500).json({
             status: 'error',
             message: 'Error changing password'
+        });
+    }
+};
+// @desc    Update user preferences (theme/accent)
+// @route   PUT /api/users/preferences
+// @access  Private
+exports.updatePreferences = async (req, res) => {
+    try {
+        const { theme, accentColor, navbarColor } = req.body;
+        const db = getDb();
+
+        const updateFields = { updatedAt: new Date() };
+        if (theme) updateFields.theme = theme;
+        if (accentColor) updateFields.accentColor = accentColor;
+        if (navbarColor) updateFields.navbarColor = navbarColor;
+
+        await db.collection('users').updateOne(
+            { _id: new ObjectId(req.user._id) },
+            { $set: updateFields }
+        );
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Preferences updated successfully'
+        });
+    } catch (error) {
+        console.error('Update preferences error:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Error updating preferences'
         });
     }
 };

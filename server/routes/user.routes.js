@@ -15,8 +15,12 @@ router.get('/profile', protect, userController.getProfile);
 router.put('/profile', protect, userController.updateProfile);
 
 // @route   PUT /api/users/change-password
-// @desc    Change user password
 // @access  Private
 router.put('/change-password', protect, userController.changePassword);
+
+// @route   PUT /api/users/preferences
+// @desc    Update user theme preferences
+// @access  Private
+router.put('/preferences', protect, userController.updatePreferences);
 
 module.exports = router;
