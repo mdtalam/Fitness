@@ -40,6 +40,13 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Security and Cross-Origin headers
+app.use((req, res, next) => {
+    // Required for Firebase Authentication popups to work correctly on some browsers/hosts
+    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+    next();
+});
+
 // Database connection middleware - MUST come before routes
 app.use(async (req, res, next) => {
     try {
