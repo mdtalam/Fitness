@@ -1,43 +1,55 @@
 const { MongoClient } = require('mongodb');
-const dns = require('dns');
-
-// Attempt to force Google DNS but don't crash if it fails
-try {
-    dns.setServers(['8.8.8.8', '8.8.4.4']);
-} catch (e) {
-    console.warn('⚠️ Note: Could not override DNS servers. Using system defaults.');
-}
 
 const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri, {
-    connectTimeoutMS: 10000,
-    socketTimeoutMS: 45000,
-    family: 4
-});
+const dbName = process.env.DB_NAME || 'FitnessTrackerDB';
 
-let db;
+if (!uri) {
+    console.error('❌ ERROR: MONGODB_URI is not defined in environment variables.');
+}
+
+let cachedClient = null;
+let cachedDb = null;
 
 const connectDB = async () => {
+    // If we have a cached connection, use it
+    if (cachedDb) {
+        return cachedDb;
+    }
+
+    if (!uri) {
+        throw new Error('MONGODB_URI is missing. Please set it in your environment variables.');
+    }
+
     try {
-        console.log('📡 Connecting to:', uri.replace(/:([^@]+)@/, ':****@'));
-        await client.connect();
-        db = client.db(process.env.DB_NAME || 'FitnessTrackerDB');
+        console.log('📡 Connecting to MongoDB Atlas...');
+        
+        // Setup client if not already created
+        if (!cachedClient) {
+            cachedClient = new MongoClient(uri, {
+                connectTimeoutMS: 10000,
+                socketTimeoutMS: 45000,
+            });
+        }
+
+        await cachedClient.connect();
+        cachedDb = cachedClient.db(dbName);
+        
         console.log('✅ MongoDB Connected Successfully');
-        return db;
+        return cachedDb;
     } catch (err) {
         console.error('❌ MongoDB Connection Failure:', err.message);
-        if (err.message.includes('ECONNREFUSED')) {
-            console.error('📡 DIAGNOSTIC: Connection refused. Usually means your IP is not whitelisted in Atlas or Port 27017/DNS is blocked.');
-        }
-        // Do not throw to allow server to start, but db will be null
+        // Clear cache on failure to allow retry
+        cachedClient = null;
+        cachedDb = null;
+        throw err;
     }
 };
 
 const getDb = () => {
-    if (!db) {
-        throw new Error('Database not initialized. Ensure your IP is whitelisted in MongoDB Atlas and the server log shows "Connected Successfully".');
+    if (!cachedDb) {
+        throw new Error('Database not initialized. Make sure connectDB() was called and awaited.');
     }
-    return db;
+    return cachedDb;
 };
 
-module.exports = { connectDB, getDb, client };
+module.exports = { connectDB, getDb };

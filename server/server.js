@@ -40,6 +40,21 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Database connection middleware - MUST come before routes
+app.use(async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    } catch (err) {
+        console.error('Database connection middleware error:', err.message);
+        res.status(500).json({
+            status: 'error',
+            message: 'Database connection failed',
+            error: process.env.NODE_ENV === 'development' ? err.message : 'Please check server logs'
+        });
+    }
+});
+
 // Request logging middleware
 app.use((req, res, next) => {
     const start = Date.now();
@@ -57,6 +72,7 @@ app.get('/', (req, res) => {
         message: 'Welcome to the Fitness Tracker API',
         endpoints: {
             health: '/health',
+            dbStatus: '/api/db-status',
             api: '/api'
         },
         version: '1.0.0'
@@ -77,7 +93,8 @@ app.get('/api', (req, res) => {
             '/api/forum',
             '/api/admin',
             '/api/newsletter',
-            '/api/payment'
+            '/api/payment',
+            '/api/db-status'
         ]
     });
 });
@@ -89,6 +106,27 @@ app.get('/health', (req, res) => {
         message: 'Fitness Tracker API is running',
         timestamp: new Date().toISOString()
     });
+});
+
+// DB Status check route
+app.get('/api/db-status', async (req, res) => {
+    try {
+        const { getDb } = require('./config/db');
+        const db = getDb();
+        const collections = await db.listCollections().toArray();
+        res.status(200).json({
+            status: 'success',
+            message: 'Database is connected',
+            database: db.databaseName,
+            collections: collections.map(c => c.name)
+        });
+    } catch (err) {
+        res.status(500).json({
+            status: 'error',
+            message: 'Database not initialized',
+            error: err.message
+        });
+    }
 });
 
 // API Routes

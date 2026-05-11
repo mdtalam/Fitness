@@ -17,7 +17,7 @@ const TrainerDetail = () => {
         queryKey: ['trainer', id],
         queryFn: async () => {
             const response = await api.get(`/trainers/${id}`);
-            return response.data.data.trainer;
+            return response.data?.data?.trainer || null;
         },
     });
 
@@ -25,7 +25,7 @@ const TrainerDetail = () => {
         queryKey: ['slots', id],
         queryFn: async () => {
             const response = await api.get(`/slots/trainer/${id}`);
-            return response.data.data.slots;
+            return response.data?.data?.slots || [];
         },
         enabled: !!id,
     });
@@ -97,10 +97,10 @@ const TrainerDetail = () => {
 
                                     <div className="flex items-center justify-center gap-1.5 mt-5">
                                         {[...Array(5)].map((_, i) => (
-                                            <Star key={i} className={`h-4 w-4 ${i < Math.floor(trainer.rating) ? 'text-primary fill-primary' : 'text-muted fill-muted'}`} />
+                                            <Star key={i} className={`h-4 w-4 ${i < Math.floor(trainer?.rating || 0) ? 'text-primary fill-primary' : 'text-muted fill-muted'}`} />
                                         ))}
                                         <span className="text-xs font-black ml-1.5 text-foreground/80">
-                                            <CountUp to={trainer.rating} decimals={1} suffix=" / 5.0" duration={1.5} />
+                                            <CountUp to={Number(trainer?.rating) || 0} decimals={1} suffix=" / 5.0" duration={1.5} />
                                         </span>
                                     </div>
 
@@ -125,7 +125,7 @@ const TrainerDetail = () => {
                                         <Award className="h-5 w-5 text-primary mx-auto mb-2" />
                                         <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-none mb-1">Experience</p>
                                         <p className="text-xl font-black">
-                                            <CountUp to={trainer.experience} suffix="+" duration={2} /> Yrs
+                                            <CountUp to={Number(trainer?.experience) || 0} suffix="+" duration={2} /> Yrs
                                         </p>
                                     </div>
                                     <div className="p-4 rounded-2xl bg-muted/30 border border-muted-foreground/10 text-center">
@@ -259,7 +259,7 @@ const TrainerDetail = () => {
                                 </div>
                                 <div className="flex-1">
                                     <h4 className="text-2xl font-black text-white">Commit to Your Growth.</h4>
-                                    <p className="text-white/80 font-bold text-lg mt-1 leading-relaxed">Choose a strategic time slot above and take the first step towards your transformation with {trainer.user?.name.split(' ')[0]}.</p>
+                                    <p className="text-white/80 font-bold text-lg mt-1 leading-relaxed">Choose a strategic time slot above and take the first step towards your transformation with {(trainer.user?.name || "our trainer").split(' ')[0]}.</p>
                                 </div>
                             </div>
                         </section>
